@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AREPA STREAMING</title>
+    <style>
+        /* Estilos para la ventana emergente */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+        .modal-content {
+            background-color: white;
+            margin: 15% auto;
+            padding: 20px;
+            border: 4px solid orange; /* Marco más pronunciado */
+            border-radius: 15px; /* Bordes redondeados */
+            width: 80%;
+            max-width: 480px; /* Ancho máximo para móviles */
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .button {
+            background-color: orange;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px; /* Bordes redondeados para el botón */
+        }
+        .button:hover {
+            background-color: darkorange;
+        }
+        .button-link {
+            display: inline-block;
+            margin-top: 20px;
+            text-align: center;
+        }
+        .button-link a {
+            background-color: orange;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 16px;
+        }
+        .button-link a:hover {
+            background-color: darkorange;
+        }
+        /* Media query para ajustar en dispositivos móviles */
+        @media (max-width: 600px) {
+            .modal-content {
+                width: 90%;
+                margin: 10% auto;
+            }
+        }
+        .header-image {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            width: 100%;
+            max-width: 150px; /* Ajusta el tamaño de la imagen según sea necesario */
+        }
+        input[type="text"], input[type="tel"], input[type="email"] {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px; /* Incrementa el tamaño de la fuente */
+        }
+        label {
+            font-size: 16px; /* Incrementa el tamaño de la fuente */
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Contenido de la ventana emergente inicial -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <img src="https://www.vendeygana.net/assets/img/logo-1.png" alt="Logo" class="header-image">
+            <h2>AREPA STREAMING: Tu Ventana al Entretenimiento sin Límites 📺🌟</h2>
+            <p>Descubre AREPA STREAMING, la plataforma revolucionaria diseñada para Smart TVs y especialmente optimizada para dispositivos y TV con ROKU. Con AREPA STREAMING, podrás disfrutar de más de 1,000 canales de TV en vivo por internet, sin tener que pagar costosas suscripciones de TV paga. 📡💰</p>
+            <h3>Características Destacadas:</h3>
+            <ul>
+                <li>🎉🎶📢 <strong>Amplia Variedad de Canales:</strong> Accede a canales de deportes, noticias, música, infantiles y mucho más.</li>
+                <li>🎬📚 <strong>Contenido On-Demand:</strong> Disfruta de más de 9,000 títulos en películas y series.</li>
+                <li>🚀📲 <strong>Enfasis en ROKU:</strong> No tendrás que pagar múltiples plataformas de streaming como Netflix, Amazon Prime, Disney+ y más. Con AREPA STREAMING, tienes todo el entretenimiento que necesitas en un solo lugar.</li>
+            </ul>
+            <h3>Ventajas de AREPA STREAMING:</h3>
+            <ul>
+                <li>💸❌ <strong>Ahorro:</strong> Di adiós a las costosas suscripciones de TV paga.</li>
+                <li>🌐🕒 <strong>Acceso Ilimitado:</strong> Disfruta de tus contenidos favoritos en cualquier momento y desde cualquier lugar.</li>
+                <li>📲✔️ <strong>Fácil de Usar:</strong> Solo necesitas descargar la aplicación en tu dispositivo ROKU y estarás listo para disfrutar.</li>
+            </ul>
+            <p>Únete a la revolución del entretenimiento con AREPA STREAMING y transforma la manera en que disfrutas de la televisión. ¡La mejor opción para ver TV en vivo y contenido on-demand sin complicaciones! 🎉📺🌟</p>
+            <button class="button" id="giftButton"><strong>Quiero por favor mi pantalla</strong></button>
+        </div>
+    </div>
+
+    <!-- Ventana emergente para ingresar datos -->
+    <div id="dataModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>EXCELENTE DANOS TUS DATOS PARA ENVIARTE TU PANTALLA PARA TU ROKU ESTA DURARA UN MES ESPERAMOS LA DISFRUTES</h2>
+            <form id="dataForm">
+                <label for="cedula">Cédula:</label><br>
+                <input type="text" id="cedula" name="cedula" required pattern="\d+" title="Solo números"><br>
+                <label for="telefono">Teléfono:</label><br>
+                <input type="tel" id="telefono" name="telefono" required pattern="\d{11}" title="Debe contener 11 números"><br>
+                <label for="correo">Correo:</label><br>
+                <input type="email" id="correo" name="correo" required pattern=".+@.+" title="Debe contener un @"><br><br>
+                <button type="button" class="button" onclick="checkAndSend()">Enviar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Ventana emergente para mostrar mensaje de error -->
+    <div id="errorModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>DISCULPA YA TENEMOS UNA SOLICITUD ANTERIOR CON ESTOS DATOS</h2>
+            <p>Es una sola pantalla de obsequio para tu ROKU por cliente VENDE Y GANA</p>
+            <div class="button-link">
+                <a href="https://www.vendeygana.net/user/" target="_blank">REGRESAR A MI CUENTA VENDE Y GANA</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Obtener los modales
+        var modal = document.getElementById("myModal");
+        var dataModal = document.getElementById("dataModal");
+        var errorModal = document.getElementById("errorModal");
+
+        // Obtener los botones que abren los modales
+        var btn = document.getElementById("giftButton");
+
+        // Obtener los elementos <span> que cierran los modales
+        var span = document.getElementsByClassName("close");
+
+        // Cuando el usuario haga clic en el botón, abrir el modal inicial
+        window.onload = function() {
+            modal.style.display = "block";
+        }
+
+        // Cuando el usuario haga clic en <span> (x), cerrar el modal
+        for (var i = 0; i < span.length; i++) {
+            span[i].onclick = function() {
+                this.parentElement.parentElement.style.display = "none";
+            }
+        }
+
+        // Cuando el usuario haga clic en el botón de obsequio, abrir el modal de datos
+        btn.onclick = function() {
+            modal.style.display = "none";
+            dataModal.style.display = "block";
+        }
+
+        // Cuando el usuario haga clic fuera del modal, cerrarlo
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+            if (event.target == dataModal) {
+                dataModal.style.display = "none";
+            }
+            if (event.target == errorModal) {
+                errorModal.style.display = "none";
+            }
+        }
+
+        // Función para verificar si los datos ya han sido enviados
+        function checkAndSend() {
+            var cedula = document.getElementById("cedula").value;
+            var telefono = document.getElementById("telefono").value;
+            var correo = document.getElementById("correo").value;
+
+            var submittedData = JSON.parse(localStorage.getItem("submittedData")) || [];
+
+            var alreadySubmitted = submittedData.some(function(data) {
+                return data.cedula === cedula || data.telefono === telefono || data.correo === correo;
+            });
+
+            if (alreadySubmitted) {
+                dataModal.style.display = "none";
+                errorModal.style.display = "block";
+            } else {
+                submittedData.push({ cedula, telefono, correo });
+                localStorage.setItem("submittedData", JSON.stringify(submittedData));
+                sendWhatsApp(cedula, telefono, correo);
+            }
+        }
+
+        // Función para enviar los datos a través de WhatsApp
+        function sendWhatsApp(cedula, telefono, correo) {
+            var message = `📋 *Datos de Solicitud:*%0A- *Cédula:* ${cedula}%0A- *Teléfono:* ${telefono}%0A- *Correo:* ${correo}%0A%0A🎁 *GRACIAS POR EL OBSEQUIO QUIERO MI PANTALLA*`;
+            var url = `https://api.whatsapp.com/send?phone=+584147397648&text=${message}`;
+
+            window.open(url, '_blank');
+        }
+    </script>
+
+</body>
+</html>
